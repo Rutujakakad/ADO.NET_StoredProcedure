@@ -7,9 +7,9 @@ namespace ADODotNetPractice
     {
         static void Main(string[] args)
         {
-            AddInput();
+           // AddInput();
             UserRepo repo = new UserRepo();
-            repo.GetAllUsers();
+           // repo.GetAllUsers();
 
             var updatedUser = new UserDetails
             {
@@ -20,7 +20,7 @@ namespace ADODotNetPractice
                 Password = "newpassword123"
             };
             repo.UpdateUser(updatedUser);
-            repo.DeleteUser(11);
+            repo.DeleteUser(1);
         }
         public static void AddInput()
         {

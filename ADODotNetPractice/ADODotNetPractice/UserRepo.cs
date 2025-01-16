@@ -10,9 +10,9 @@ namespace ADODotNetPractice
 {
     public class UserRepo
     {
-        public static string connectionString = @"Data Source=LAPTOP-HB42IHJ0\SQLEXPRESS;Initial Catalog=DemoDBPractice;Integrated Security=True;TrustServerCertificate=True";
-        public string connectionConnection = @"Server=LAPTOP-HB42IHJ0\SQLEXPRESS;Database=DemoDBPractice;Trusted_Connection=True";
-
+        public static string connectionString = @"Data Source=LAPTOP-HB42IHJ0\SQLEXPRESS;Initial Catalog=DemoDBPractice;Integrated Security=True;TrustServerCertificate=True;Encrypt=false";
+       // public string connectionConnection = @"Server=LAPTOP-HB42IHJ0\SQLEXPRESS;Database=DemoDBPractice;Trusted_Connection=True";
+        //The second connection string is a template for connecting to any SQL Server instance and database, which you can customize.
         SqlConnection connection = new SqlConnection(connectionString);// throwing exception
 
         public bool AddUserDetails(UserDetails user)
@@ -28,7 +28,7 @@ namespace ADODotNetPractice
                 connection.Open();
                 var result = cmd.ExecuteNonQuery();
                 if (result != 0)
-                {
+                { 
                     return true;
                 }
                 return false;
@@ -63,16 +63,17 @@ namespace ADODotNetPractice
 
         public void UpdateUser(UserDetails user)
         {
-            using (connection)
+            using (this.connection)
             {
-                SqlCommand cmd = new SqlCommand("spUpdateUser", connection);
+                SqlCommand cmd = new SqlCommand("spUpdateUserDetails", this.connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserId", user.UserId);
                 cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", user.LastName);
                 cmd.Parameters.AddWithValue("@Email", user.Email);
                 cmd.Parameters.AddWithValue("@Password", user.Password);
-                connection.Open();
+                this.connection.Open();
+                
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("User updated successfully!");
 
@@ -81,12 +82,12 @@ namespace ADODotNetPractice
 
         public void DeleteUser(int userId)
         {
-            using (connection)
+            using (this.connection)
             {
-                SqlCommand cmd = new SqlCommand("spDeleteUser", connection);
+                SqlCommand cmd = new SqlCommand("spDeleteUser", this.connection);
                 cmd.CommandType= CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserId", userId);
-                connection.Open();
+                this.connection.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("User deleted successfully!");
             }
